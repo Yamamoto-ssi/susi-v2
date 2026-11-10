@@ -2,9 +2,9 @@
 session_start();
 include 'config/db.php';
 
-$client_id = '44077547718-4nesakkabijeqadjsse1fq82knq0rm1n.apps.googleusercontent.com';
-$client_secret = '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';
-$redirect_uri = 'http://localhost/HouseAndLotApp/google-callback.php';
+    $client_id = '';
+    $client_secret = '';
+    $redirect_uri = '';
 
 // 1. Check if Google returned an explicit error
 if (isset($_GET['error'])) {
