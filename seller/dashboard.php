@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<aside class="side">
+<aside class="side" id="sidebar">
   <div class="logo"><span class="mk"><i></i><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V7l8-4 8 4v14M8 10h2M14 10h2M8 14h2M14 14h2M9 21v-3h6v3"/></svg></span><div><b>AUCTION<span>HAUS</span></b><small>SELLER PORTAL</small></div></div>
   <div class="cap">WORKSPACE</div>
   <div class="ws clickable" onclick="alert('Workspace Switcher Clicked')"><div class="av">MH</div><div><b>Meridian Holdings</b><small>Verified seller</small></div><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>
@@ -29,6 +29,9 @@
 
 <main>
   <div class="top">
+    <button type="button" class="mobile-nav-toggle" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
     <div class="crumb">Seller Portal ›<b>AuctionHaus</b></div>
     <div class="search">
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -203,6 +206,8 @@
   </section>
 </main>
 
+<div class="mobile-overlay" id="navOverlay" onclick="toggleMobileNav(false)"></div>
+
 <!-- SUBMIT PROPERTY MODAL -->
 <div class="modal" id="submitModal">
   <form class="sheet" onsubmit="handleModalSubmit(event)">
@@ -240,8 +245,24 @@
 </div>
 
 <script>
+  function toggleMobileNav(forceOpen) {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.querySelector('.mobile-nav-toggle');
+    const overlay = document.getElementById('navOverlay');
+    const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !sidebar.classList.contains('nav-open');
+
+    sidebar.classList.toggle('nav-open', shouldOpen);
+    document.body.classList.toggle('nav-open', shouldOpen);
+    toggle.classList.toggle('is-open', shouldOpen);
+    toggle.setAttribute('aria-expanded', String(shouldOpen));
+    overlay.style.display = shouldOpen ? 'block' : 'none';
+  }
+
   function toggleModal(show) {
     document.getElementById('submitModal').style.display = show ? 'flex' : 'none';
+    if (show) {
+      toggleMobileNav(false);
+    }
   }
 
   function handleModalSubmit(event) {
@@ -261,6 +282,20 @@
       rows[i].style.display = text.includes(term) ? '' : 'none';
     }
   }
+
+  document.querySelectorAll('.side .nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1000) {
+        toggleMobileNav(false);
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1000) {
+      toggleMobileNav(false);
+    }
+  });
 </script>
 
 </body>
